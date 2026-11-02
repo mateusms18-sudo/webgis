@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Visualizador acadêmico de indicadores municipais do COREDE Centro-Sul, Rio Grande do Sul." />
+    <meta name="theme-color" content="#101e27" />
+    <title>Feiras e Indicadores | COREDE Centro-Sul</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar"><div class="brand"><img class="brand-logo" src="assets/logo-uergs.png" alt="UERGS — Universidade Estadual do Rio Grande do Sul" /><span>ATLAS TERRITORIAL<small>COREDE CENTRO-SUL · RS</small></span></div><span class="header-tag">FEIRAS · TERRITÓRIO · AGRICULTURA FAMILIAR</span></header>
+    <main>
+      <section class="heading"><div><p class="eyebrow">RIO GRANDE DO SUL · BRASIL</p><h1>Feiras e desenvolvimento rural</h1><p class="subtitle">Agricultura familiar e agroecologia no COREDE Centro-Sul</p></div><div class="region-total"><strong>17</strong><span>municípios</span></div></section>
+
+      <nav class="section-tabs" aria-label="Seções do atlas"><button class="section-tab active" type="button" data-section="fairs-section">Feiras <span>01</span></button><button class="section-tab" type="button" data-section="indicators-section">Indicadores municipais <span>02</span></button></nav>
+
+      <section id="fairs-section" class="explorer section-view" aria-label="Localização e dados das feiras">
+        <aside class="filters">
+          <div class="panel-heading"><span class="filter-icon">≡</span><div><strong>Filtros das feiras</strong><small>Localização e funcionamento</small></div></div>
+          <label for="fair-municipality">Município</label><select id="fair-municipality"><option value="all">Todos os municípios</option></select>
+          <label for="fair-active">Situação</label><select id="fair-active"><option value="all">Todas</option><option value="sim">Ativa</option><option value="nao">Inativa</option></select>
+          <label for="fair-periodicity">Periodicidade</label><select id="fair-periodicity"><option value="all">Todas</option><option>Semanal</option><option>Quinzenal</option><option>Mensal</option><option>Mais de 1x/semana</option></select>
+          <label for="fair-search">Feira ou produto</label><input id="fair-search" type="search" placeholder="Buscar no cadastro" />
+          <div class="filter-divider"></div>
+          <label class="upload-label" for="fair-file"><span>＋</span> Carregar cadastro CSV</label><input id="fair-file" type="file" accept=".csv,text/csv" />
+          <p class="file-hint">Cadastro de feiras com coordenadas em graus decimais.</p><a class="template-link" href="data/modelo_feiras.csv" download>Baixar modelo de cadastro ↗</a>
+          <p id="fair-load-status" class="load-status" aria-live="polite">Nenhum cadastro carregado.</p>
+        </aside>
+
+        <div class="map-column">
+          <div class="map-heading"><div><strong id="fair-map-title">Localização das feiras</strong><span id="fair-map-caption">Pontos de feira no recorte municipal do COREDE</span></div><button id="fair-reset-map" class="reset-button" type="button" title="Enquadrar recorte">↗ <span>Enquadrar</span></button></div>
+          <div class="map-frame"><div id="fair-map" role="application" aria-label="Mapa das feiras da agricultura familiar e agroecológicas"></div><div class="map-note" id="fair-map-note">Carregue o cadastro das feiras para localizar os pontos no território.</div><div class="map-source">MALHA MUNICIPAL · IBGE</div></div>
+          <div class="map-legend"><span class="fair-marker-legend"></span><span>Feira cadastrada</span><span class="legend-spacer"></span><span id="fair-count">0 feiras</span></div>
+        </div>
+        <div class="fair-table-wrap"><div class="table-heading"><strong>Feiras no recorte</strong><span id="fair-table-count">Nenhum registro</span></div><div class="table-scroll"><table><thead><tr><th>Feira</th><th>Município</th><th>Situação</th><th>Periodicidade</th><th>Produtos predominantes</th></tr></thead><tbody id="fair-table-body"><tr><td colspan="5" class="empty-row">O cadastro está vazio. Importe o modelo preenchido com dados verificados.</td></tr></tbody></table></div></div>
+      </section>
+
+      <section id="indicators-section" class="explorer section-view" aria-label="Explorador de indicadores municipais" hidden>
+        <aside class="filters">
+          <div class="panel-heading"><span class="filter-icon">≡</span><div><strong>Parâmetros de análise</strong><small>Selecione uma dimensão</small></div></div>
+          <label for="municipality">Município</label><select id="municipality"><option value="all">Todos os municípios</option></select>
+          <label for="theme">Dimensão temática</label><select id="theme"></select>
+          <label for="indicator">Indicador</label><select id="indicator"></select>
+          <label for="year">Ano de referência</label><select id="year"><option value="all">Todos os anos</option></select>
+          <div class="filter-divider"></div>
+          <label class="upload-label" for="dataset-file"><span>＋</span> Carregar base CSV</label><input id="dataset-file" type="file" accept=".csv,text/csv" />
+          <p class="file-hint">CSV com código IBGE, município, dimensão, indicador, ano, valor, unidade e fonte.</p><a class="template-link" href="data/modelo_indicadores.csv" download>Baixar modelo CSV ↗</a>
+          <p id="load-status" class="load-status" aria-live="polite">Nenhuma base estatística carregada.</p>
+        </aside>
+
+        <div class="map-column">
+          <div class="map-heading"><div><strong id="map-title">Municípios do COREDE Centro-Sul</strong><span id="selection-caption">17 unidades territoriais · limites municipais do IBGE</span></div><button id="reset-map" class="reset-button" type="button" title="Enquadrar recorte">↗ <span>Enquadrar</span></button></div>
+          <div class="map-frame"><div id="map" role="application" aria-label="Mapa dos municípios do COREDE Centro-Sul"></div><div class="map-note" id="map-note">Selecione um indicador e carregue os dados para visualizar a distribuição municipal.</div><div class="map-source">MALHA MUNICIPAL · IBGE</div></div>
+          <div class="map-legend"><span class="legend-swatch"></span><span id="legend-label">Sem valores associados ao indicador</span><span class="legend-spacer"></span><span id="map-count">17 municípios</span></div>
+        </div>
+      <section class="metadata"><div class="metadata-label">REGISTRO SELECIONADO</div><div class="metadata-main"><strong id="record-indicator">População total</strong><span id="record-detail">Aguardando carregamento de uma base estatística.</span></div><div class="metadata-source"><span>FONTE</span><strong id="record-source">Não informada</strong></div><div class="metadata-year"><span>ANO</span><strong id="record-year">—</strong></div></section>
+      <section class="indicator-explanation" aria-label="Explicação do indicador selecionado"><h2>Sobre o indicador</h2><p id="indicator-description" aria-live="polite">Selecione um indicador para consultar uma breve explicação sobre o dado.</p></section>
+      <p class="method-note">Dados oficiais do IBGE/SIDRA. Os anos variam entre pesquisas; consulte fonte e referência em cada indicador. Medidas derivadas e proxies estão identificadas.</p>
+      </section>
+    </main>
+    <footer><span>ATLAS TERRITORIAL · COREDE CENTRO-SUL</span><span>Limites municipais: IBGE · base cartográfica © OpenStreetMap</span></footer>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
